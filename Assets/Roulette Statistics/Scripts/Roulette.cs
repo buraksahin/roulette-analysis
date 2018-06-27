@@ -38,8 +38,8 @@ public class Roulette{
     private int repeatZoneVoi = 0, repeatZoneOrp = 0, repeatZoneTier = 0;   // Repeat of Zones
 
     // Line and Number Lists
-    private List<Number> numbers = new List<Number>(); // Keep the numbers
-    private List<int> numberLine = new List<int>();    // Number Line
+    public List<Number> numbers = new List<Number>(); // Keep the numbers
+    public List<int> numberLine = new List<int>();    // Number Line
 
     // Statistics and Analysis
     float predictionCorrectness = 0.0f; // Prediction Correctness in range of [0, 1]
@@ -170,97 +170,25 @@ public class Roulette{
                 numbers[_number].IncreaserepeatCount(); // Increase repeat count of the number
             }
         }
-
-        //Calculate Probabilities
-        CalculateProbabilities(_number);
     }
 
     // Calculate Probabilities
     public void CalculateProbabilities(int num){
-        bool testOk = true;
-        int tempLoopCount = 0;
-        List<int> numberList = new List<int>();
-        List<int> choosenNumbers = new List<int>();
-        while (testOk && tempLoopCount<999){
-            tempLoopCount++;
-            numberList.Clear();
-            choosenNumbers.Clear();
-            // Create Number List
-            for (int i = 0; i < 37; i++){
-                numberList.Add(i);
-            }
-
-            // Choose 10 numbers from List and add to choosenNumbers List then Delete in numberList
-            while (choosenNumbers.Count < 18){
-                int tempIndex = Random.RandomRange(0, numberList.Count);
-                choosenNumbers.Add(numberList[tempIndex]);
-                numberList.RemoveAt(tempIndex);
-            }
-
-            for(int x=0; x<choosenNumbers.Count; x++){
-                if (choosenNumbers[x] == num){
-                    randomCorrectnessCount = (randomCorrectnessCount + tempLoopCount) / 2;
-                    randomCorrectnessGraph[tempLoopCount] = randomCorrectnessGraph[tempLoopCount] + 1;
-                    testOk = false;
-                    break;
-                }
-            }
-        }
+    
     }
 
     /*
      * Generate Random Numbers
      */
      public void GenerateRandomNumber(){    
-        int countPredict = CalculatePredictionCount();
-        List<int> numberList = new List<int>();
-        List<int> choosenNumbers = new List<int>();
-        while (countPredict>=0){ 
-            countPredict--;
-            numberList.Clear();
-            choosenNumbers.Clear();
-            // Create Number List
-            for (int i = 0; i < 37; i++){
-                numberList.Add(i);
-            }
 
-            // Choose 10 numbers from List and add to choosenNumbers List then Delete in numberList
-            while (choosenNumbers.Count < 18){
-                int tempIndex = Random.RandomRange(0, numberList.Count);
-                choosenNumbers.Add(numberList[tempIndex]);
-                numberList.RemoveAt(tempIndex);
-            }
-        }
-
-        for(int z=0; z< choosenNumbers.Count; z++){
-            Debug.Log(">" + choosenNumbers[z]);
-        }
     }
 
     /*
      * Calculate Average Prediction Count
      */
      int CalculatePredictionCount(){
-        int peekIndex = 0;
-        int maxTotal = 0;
-        int maxPeekIndex = 0;
-        for (int i = 0; i<randomCorrectnessGraph.Length; i = i + 100){
-            int tempTotal = 0;
-            for (int p=i; p<i+100; p++){
-                tempTotal = tempTotal + randomCorrectnessGraph[p];
-            }
-            if(tempTotal> maxTotal){
-                maxTotal = tempTotal;
-                peekIndex = i;
-            }
-        }
-
-        for(int p=0; p < randomCorrectnessGraph.Length && p<peekIndex + 10; p++){
-            if (randomCorrectnessGraph[p] > maxPeekIndex){
-                maxPeekIndex = p;
-            }
-        }
-        return maxPeekIndex;
+        return 0;
     }
     #endregion
 
@@ -269,7 +197,7 @@ public class Roulette{
      * Get Statistics 
      */
      // Total Spin Count and Colors
-    public int getSpinSount() { return spinCount; }
+    public int getSpinCount() { return spinCount; }
     public int getTotalOfRed() { return totalOfRed; }
     public int getTotalOfBlack() { return totalOfBlack; }
     public int getTotalOfGreen() { return totalOfGreen; }
