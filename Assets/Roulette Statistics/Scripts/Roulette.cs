@@ -21,21 +21,21 @@ public class Roulette{
     int[] zone3T = { 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33 };                     // Zone 3 TiersduCylindre
 
     // Stats
-    private int spinCount = 0;                                          // Spin Count
-    private int totalOfRed = 0, totalOfBlack = 0, totalOfGreen = 0;     // Total of Colors
-    private int totalOfOdd = 0, totalOfEven = 0;                        // Total of Odd and Even
-    private int tot1stDozen = 0, tot2ndDozen = 0, tot3rdDozen;          // Total of Dozens
-    private int tot1stRow = 0, tot2ndRow = 0, tot3rdRow = 0;            // Total of Rows
-    private int totalOf1to18 = 0, totalOf19to36 = 0;                    // Total of Range
-    private int totalZoneVoi = 0, totalZoneOrp = 0, totalZoneTier = 0;  // Total of Zones
+    private int spinCount = 0;					// Total spin count
+	private int[] totalColor = new int[3];		// Total colors 0:Green 1:Red 2:Black
+	private int[] totalEvenOdd = new int[2];	// Total odd or even 0:Even 1:Odd
+	private int[] totalDozen = new int[3];		// Total dozens
+	private int[] totalColumn = new int[3];		// Total columns
+	private int[] totalLowHigh = new int[2];	// Total low high numbers
+	private int[] totalZone = new int[3];		// Total wheel zones 0:VoisindsduZero 1:Orphelins 2:TierduCylindre
 
     // Repeats
-    private int repeatRed = 0, repeatBlack = 0, repeatGreen = 0;            // Total of Color Repeats
-    private int repeatOdd = 0, repeatEven = 0;                              // Total of Number Repeats
-    private int repeat1stDozen = 0, repeat2ndDozen = 0, repeat3rdDozen = 0; // Repeat of Blocks
-    private int repeat1stRow = 0, repeat2ndRow = 0, repeat3rdRow = 0;       // Repeat of Rows
-    private int repeat1to18 = 0, repeat19to36 = 0;                          // Repeat of Range
-    private int repeatZoneVoi = 0, repeatZoneOrp = 0, repeatZoneTier = 0;   // Repeat of Zones
+	private int[] repeatColor = new int[3];		// Total repeat of colors 0:Green 1:Red 2:Black
+	private int[] repeatEvenOdd = new int[2];	// Total repeat of odd or even 0:Even 1:Odd
+	private int[] repeatDozen = new int[3];		// Total repeat of dozens
+    private int[] repeatColumn = new int[3];	// Total repeat of columns
+	private int[] repeatLowHigh = new int[2];	// Total repeat of low and high numbers
+	private int[] repeatZone = new int[3];		// Total repeat of zones 0:VoisindsduZero 1:Orphelins 2:TierduCylindre
 
     // Line and Number Lists
     public List<Number> numbers = new List<Number>(); // Keep the numbers
@@ -44,8 +44,6 @@ public class Roulette{
     // Statistics and Analysis
     float predictionCorrectness = 0.0f; // Prediction Correctness in range of [0, 1]
     int predictedNumber;                // Predicted Number
-    int randomCorrectnessCount;         // Random Number Generate
-    int[] randomCorrectnessGraph = new int[1000]; // Keep Correctness Map for Random Generating
 
     #endregion
 
@@ -55,7 +53,7 @@ public class Roulette{
     {
         // Set Numbers
         for (int i = 0; i < 37; i++){
-            numbers.Add( new Number( i, getNumberColor(i), getNumberPosition(i), getNumberRowPosition(i), getNumberDozen(i), getNumberZone(i)) );
+			numbers.Add( new Number( i, getNumberColor(i), getNumberPosition(i), getNumberColumnPosition(i), getNumberDozen(i), getNumberZone(i)) );
             numbers[i].CalculatePropertiesValue();
         }
     }
@@ -80,7 +78,7 @@ public class Roulette{
                 }
             }
             return tempColor;
-        }
+		}
     }
 
     /*
@@ -102,12 +100,12 @@ public class Roulette{
     /*
      * Check Number Row Position
      */
-    int getNumberRowPosition(int _number){
-        int rowPosition = 0;
-        if (_number % 3 == 0) { rowPosition = 1; }
-        if (_number % 3 == 2) { rowPosition = 2; }
-        if (_number % 3 == 1) { rowPosition = 3; }
-        return rowPosition;
+    int getNumberColumnPosition(int _number){
+		int columnPosition = 0;
+		if (_number % 3 == 0) { columnPosition = 0; }
+		if (_number % 3 == 2) { columnPosition = 1; }
+		if (_number % 3 == 1) { columnPosition = 2; }
+        return columnPosition;
     }
 
     /*
@@ -115,9 +113,9 @@ public class Roulette{
      */
     int getNumberDozen(int _number){
         int dozenPos = 0;
-        if (_number > 0  && _number < 13) { dozenPos = 1; }
-        else if (_number > 12 && _number < 25) { dozenPos = 2; }
-        else if (_number > 24) { dozenPos = 3; }
+        if (_number >= 0  && _number < 13) { dozenPos = 0; }
+        else if (_number > 12 && _number < 25) { dozenPos = 1; }
+        else if (_number > 24) { dozenPos = 2; }
         return dozenPos;
     }
 
@@ -131,7 +129,7 @@ public class Roulette{
         {
             if (_number == zone1V[i])
             {
-                tempZone = 1;
+                tempZone = 0;
                 break;
             }
         }
@@ -139,7 +137,7 @@ public class Roulette{
         {
             if (_number == zone2O[i])
             {
-                tempZone = 2;
+                tempZone = 1;
                 break;
             }
         }
@@ -147,7 +145,7 @@ public class Roulette{
         {
             if (_number == zone3T[i])
             {
-                tempZone = 3;
+                tempZone = 2;
                 break;
             }
         }
@@ -161,15 +159,36 @@ public class Roulette{
         numbers[_number].IncreaseRank(); // Increase number count
         numbers[_number].setSpinLine(spinCount);
         numberLine.Add(_number);
-        if (spinCount > 1)
+        if(spinCount > 1)
         {
-            numbers[_number].increasePrev(numberLine[spinCount - 2]); // Increase current number's prev
-            numbers[numberLine[spinCount - 2]].increaseNext(_number);             // Increase next of previous number
-            if(numberLine[spinCount - 1] == _number) // if previous number and current number is same
-            {
+            numbers[_number].increasePrev(numberLine[spinCount - 2]);	// Increase current number's prev
+            numbers[numberLine[spinCount - 2]].increaseNext(_number);	// Increase next of previous number
+			// if previous number and current number is same
+			if(numberLine[spinCount - 1] == _number){
                 numbers[_number].IncreaserepeatCount(); // Increase repeat count of the number
             }
         }
+		// Increase total color
+		totalColor[numbers[_number].getColor()] += 1;
+
+		// Increase total Odd or Even
+		totalEvenOdd[_number%2] += 1;
+		if (_number != 0) {
+			// Increase total dozen
+			totalDozen [getNumberDozen(_number)] = totalDozen[getNumberDozen(_number)] + 1;
+
+			// Increase total column
+			totalColumn [getNumberColumnPosition(_number)] = totalColumn[getNumberColumnPosition(_number)] + 1;
+
+			// Increase total low high
+			if (_number < 19) {
+				totalColumn [0] += 1;
+			} else {
+				totalColumn [1] += 1;
+			}
+			// Increase total wheel
+			//totalZone[numbers[_number].getNumberZone()] += 1;
+		}
     }
 
     // Calculate Probabilities
@@ -198,62 +217,62 @@ public class Roulette{
      */
      // Total Spin Count and Colors
     public int getSpinCount() { return spinCount; }
-    public int getTotalOfRed() { return totalOfRed; }
-    public int getTotalOfBlack() { return totalOfBlack; }
-    public int getTotalOfGreen() { return totalOfGreen; }
+	public int getTotalOfGreen() { return totalColor[0]; }
+	public int getTotalOfRed() { return totalColor[1]; }
+	public int getTotalOfBlack() { return totalColor[2]; }
 
     // Total of Odd and Even
-    public int getTotalOdd() { return totalOfOdd; }
-    public int getTotalEven() { return totalOfEven; }
+	public int getTotalEven() { return totalEvenOdd[0]; }
+	public int getTotalOdd() { return totalEvenOdd[1]; }
 
     // Total of Dozen
-    public int getTot1stDozen() { return tot1stDozen; }
-    public int getTo2ndDozen() { return tot2ndDozen; }
-    public int getTot3rdDozen() { return tot3rdDozen; }
+	public int getTot1stDozen() { return totalDozen[0]; }
+	public int getTo2ndDozen() { return totalDozen[1]; }
+	public int getTot3rdDozen() { return totalDozen[2]; }
 
     // Total of Rows
-    public int getTot1stRow() { return tot1stRow; }
-    public int getTot2ndRow() { return tot2ndRow; }
-    public int getTot3rdRow() { return tot3rdRow; }
+	public int getTot1stCol() { return totalColumn[0]; }
+	public int getTot2ndCol() { return totalColumn[1]; }
+	public int getTot3rdCol() { return totalColumn[2]; }
 
     // Total of Range
-    public int getTotOf1to18() { return totalOf1to18; }
-    public int getTotOf19to36() { return totalOf19to36; }
+	public int getTotLow() { return totalLowHigh[0]; }
+	public int getTotHigh() { return totalLowHigh[1]; }
 
     // Zone
-    public int getZoneVois() { return totalZoneVoi; }
-    public int getZoneOrphelins() { return totalZoneOrp; }
-    public int getZoneTiers() { return totalZoneTier; }
+	public int getZoneVois() { return totalZone[0]; }
+	public int getZoneOrphelins() { return totalZone[1]; }
+	public int getZoneTiers() { return totalZone[2]; }
 
     /*
      * Get Repeats
      */
     // Colors
-    public  int getRepeatRed() { return repeatRed; }
-    public int getRepeatBlack() { return repeatBlack; }
-    public int getRepeatGreen() { return repeatGreen; }
+	public int getRepeatGreen() { return repeatColor[0]; }
+	public  int getRepeatRed() { return repeatColor[1]; }
+	public int getRepeatBlack() { return repeatColor[2]; }
 
     // Odd and Even
-    public int getRepeatOdd() { return repeatOdd; }
-    public int getRepeatEven() { return repeatEven; }
+	public int getRepeatOdd() { return repeatEvenOdd[0]; }
+    public int getRepeatEven() { return repeatEvenOdd[1]; }
 
     // Dozen
-    public int getRepeat1stDozen() { return repeat1stDozen; }
-    public int getRepeat2ndDozen() { return repeat2ndDozen; }
-    public int getRepeat3rdDozen() { return repeat3rdDozen; }
+	public int getRepeat1stDozen() { return repeatDozen[0]; }
+	public int getRepeat2ndDozen() { return repeatDozen[1]; }
+	public int getRepeat3rdDozen() { return repeatDozen[2]; }
 
     // Rows
-    public int getRepeat1stRow() { return repeat1stRow; }
-    public int getRepeat2ndRow() { return repeat2ndRow; }
-    public int getRepeat3rdRow() { return repeat3rdRow; }
+    public int getRepeat1stColumn() { return repeatColumn[0]; }
+	public int getRepeat2ndColumn() { return repeatColumn[1]; }
+	public int getRepeat3rdColumn() { return repeatColumn[2]; }
 
     // 1 to 18 and 19 to 36
-    public int getRepeat1to18() { return repeat1to18; }
-    public int getRepeat19to36() { return repeat19to36; }
+	public int getRepeatLow() { return repeatLowHigh[0]; }
+	public int getRepeatHigh() { return repeatLowHigh[1]; }
 
     // Zone
-    public int getRepeatZoneVois() { return repeatZoneVoi; }
-    public int getRepeatZoneOrphelins() { return repeatZoneOrp; }
-    public int getRepeatZoneTiers() { return repeatZoneTier; }
+	public int getRepeatZoneVois() { return repeatZone[0]; }
+	public int getRepeatZoneOrphelins() { return repeatZone[1]; }
+	public int getRepeatZoneTiers() { return repeatZone[2]; }
     #endregion
 }

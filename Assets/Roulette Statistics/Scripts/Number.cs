@@ -8,13 +8,13 @@ public class Number
      * Variables 
      */
     // Number Properties
-    private int number;                           // Number Value
-    private int color;                            // 0: green 1:red 2: black
-    private int numberPosition;                   // Number position on the roulette table
-    private int numberRow;                        // Number Row Value
-    private int numberDozen;                      // Number Dozen Value
-    private int numberZone;                       // Number Zone
-    private int numberPropertiesValue;            // Keep number properties as a calculated value
+    private int number;					// Number Value
+    private int color;					// 0: green 1:red 2: black
+    private int numberPosition;			// Number position on the wheel
+    private int numberColumn;			// Number Row Value
+    private int numberDozen;			// Number Dozen Value
+    private int numberZone;				// Number Zone
+    private int numberPropertiesValue;	// Keep number properties as a calculated value
 
     // Number Statistics and Analysis
     private int rank;                             // Total number of counts
@@ -27,11 +27,11 @@ public class Number
 
     #region Main Functions
     // Constructor
-    public Number(int _number, int _color, int _numberPosition, int _numberRow, int _nubmerDozen, int _numberZone){
+    public Number(int _number, int _color, int _numberPosition, int _numberColumn, int _nubmerDozen, int _numberZone){
         number = _number;
         color = _color;
         numberPosition = _numberPosition;
-        numberRow = _numberRow;
+        numberColumn = _numberColumn;
         numberDozen = _nubmerDozen;
         numberZone = _numberZone;
     }
@@ -41,7 +41,7 @@ public class Number
     // Getters
     public int getColor() { return color; }
     public int getPosition() { return numberPosition; }
-    public int getNumberRow() { return numberRow; }
+    public int getNumberColumn() { return numberColumn; }
     public int getNumberDozen() { return numberDozen; }
     public int getNumberZone() { return numberZone; }
     public int getNumberPropertiesValue() { return numberPropertiesValue; }
@@ -97,7 +97,7 @@ public class Number
     public void CalculatePropertiesValue(){
         int tempNumber = 0;
         tempNumber = numberDozen + tempNumber;
-        tempNumber = 4 * numberRow + tempNumber;
+        tempNumber = 4 * numberColumn + tempNumber;
         if(number % 2 != 0){
             tempNumber = 16 + tempNumber;
         }
