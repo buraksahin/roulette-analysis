@@ -16,10 +16,10 @@ public class Roulette{
                               20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26 }; // Clockwise Numbers on the wheel
 
     // Number zones on the wheel
-    int[] zone1V = { 22, 18, 29, 7, 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25 };    // Zone 1 VoisinsduZero
-    int[] zone2O = { 17, 35, 6, 1, 20, 14, 31, 9 };                                      // Zone 2 Orphelins
-    int[] zone3T = { 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33 };                     // Zone 3 TiersduCylindre
-
+    int[] zone1V = { 22, 18, 29, 7, 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25 };	// Zone 1 VoisinsduZero
+    int[] zone2O = { 1, 20, 14, 31, 9 };                                      			// Zone 2 Orphelins
+	int[] zone22O = { 17, 34, 6 };														// Zone 4 Orphelins
+    int[] zone3T = { 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33 };                    // Zone 3 TiersduCylindre
     // Stats
     private int spinCount = 0;					// Total spin count
 	private int[] totalColor = new int[3];		// Total colors 0:Green 1:Red 2:Black
@@ -27,7 +27,7 @@ public class Roulette{
 	private int[] totalDozen = new int[3];		// Total dozens
 	private int[] totalColumn = new int[3];		// Total columns
 	private int[] totalLowHigh = new int[2];	// Total low high numbers
-	private int[] totalZone = new int[3];		// Total wheel zones 0:VoisindsduZero 1:Orphelins 2:TierduCylindre
+	private int[] totalZone = new int[4];		// Total wheel zones 0:VoisindsduZero 1:Orphelins 2:TierduCylindre 3:Orphelins(2nd part)
 
     // Repeats
 	private int[] repeatColor = new int[3];		// Total repeat of colors 0:Green 1:Red 2:Black
@@ -35,7 +35,7 @@ public class Roulette{
 	private int[] repeatDozen = new int[3];		// Total repeat of dozens
     private int[] repeatColumn = new int[3];	// Total repeat of columns
 	private int[] repeatLowHigh = new int[2];	// Total repeat of low and high numbers
-	private int[] repeatZone = new int[3];		// Total repeat of zones 0:VoisindsduZero 1:Orphelins 2:TierduCylindre
+	private int[] repeatZone = new int[4];		// Total repeat of zones 0:VoisindsduZero 1:Orphelins 2:TierduCylindre
 
     // Line and Number Lists
     public List<Number> numbers = new List<Number>(); // Keep the numbers
@@ -141,6 +141,14 @@ public class Roulette{
                 break;
             }
         }
+		for (int i = 0; i < zone22O.Length; i++)
+		{
+			if (_number == zone22O[i])
+			{
+				tempZone = 3;
+				break;
+			}
+		}
         for (int i = 0; i < zone3T.Length; i++)
         {
             if (_number == zone3T[i])
@@ -173,22 +181,23 @@ public class Roulette{
 
 		// Increase total Odd or Even
 		totalEvenOdd[_number%2] += 1;
+
 		if (_number != 0) {
 			// Increase total dozen
-			totalDozen [getNumberDozen(_number)] = totalDozen[getNumberDozen(_number)] + 1;
+			totalDozen[getNumberDozen(_number)] += 1;
 
 			// Increase total column
-			totalColumn [getNumberColumnPosition(_number)] = totalColumn[getNumberColumnPosition(_number)] + 1;
+			totalColumn[getNumberColumnPosition(_number)] += 1;
 
 			// Increase total low high
 			if (_number < 19) {
-				totalColumn [0] += 1;
+				totalLowHigh [0] += 1;
 			} else {
-				totalColumn [1] += 1;
+				totalLowHigh [1] += 1;
 			}
-			// Increase total wheel
-			//totalZone[numbers[_number].getNumberZone()] += 1;
 		}
+		// Increase total wheel
+		totalZone[getNumberZone(_number)] += 1;
     }
 
     // Calculate Probabilities
@@ -230,7 +239,7 @@ public class Roulette{
 	public int getTo2ndDozen() { return totalDozen[1]; }
 	public int getTot3rdDozen() { return totalDozen[2]; }
 
-    // Total of Rows
+    // Total of Columns
 	public int getTot1stCol() { return totalColumn[0]; }
 	public int getTot2ndCol() { return totalColumn[1]; }
 	public int getTot3rdCol() { return totalColumn[2]; }
@@ -243,6 +252,7 @@ public class Roulette{
 	public int getZoneVois() { return totalZone[0]; }
 	public int getZoneOrphelins() { return totalZone[1]; }
 	public int getZoneTiers() { return totalZone[2]; }
+	public int getZoneOrphelins2() { return totalZone[3]; }
 
     /*
      * Get Repeats
