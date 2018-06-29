@@ -64,7 +64,7 @@ public class Roulette{
      * Return Number Color
      * 0:Green - 1:Red - 2:Black
      */
-    int getNumberColor(int _number){
+    public int getNumberColor(int _number){
         int tempColor = 0;
         if (_number == 0){
             return tempColor;
