@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour{
 	public Transform[] textColumns;
 	public Transform textLastNumbers;
 	public Transform textSpin, textStats1, textStats2, textStats3;
-	public Transform textWheelZ1, textWheelZ2, textWheelZ3, textWheelZ4;  
+	public Transform textWheelZ1, textWheelZ2, textWheelZ3, textWheelZ4;
+	public Transform textWheel2Z1, textWheel2Z2, textWheel2Z3, textWheel2Z4;
     // Use this for initialization
     void Start(){
         myRoulette = new Roulette();
@@ -56,5 +57,9 @@ public class GameManager : MonoBehaviour{
 		textWheelZ2.GetComponent<Text>().text = myRoulette.getZoneOrphelins() + "";
 		textWheelZ3.GetComponent<Text>().text = myRoulette.getZoneOrphelins2() + "";
 		textWheelZ4.GetComponent<Text>().text = myRoulette.getZoneTiers() + "";
+		textWheel2Z1.GetComponent<Text>().text = myRoulette.getZoneVois() + "";
+		textWheel2Z2.GetComponent<Text>().text = myRoulette.getZoneOrphelins() + "";
+		textWheel2Z3.GetComponent<Text>().text = myRoulette.getZoneOrphelins2() + "";
+		textWheel2Z4.GetComponent<Text>().text = myRoulette.getZoneTiers() + "";
 	}
 }

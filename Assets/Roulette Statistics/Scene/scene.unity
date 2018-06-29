@@ -5689,12 +5689,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 514e88535eb02964bbf640f232657def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RecentNumbersPanel: {fileID: 1008433962}
-  NumberAnalysisPanel: {fileID: 329507633}
-  StatisticsPanel: {fileID: 1656483112}
-  OptionsPanel: {fileID: 1527019261}
-  AboutPanel: {fileID: 394959229}
-  SpinnerPanel: {fileID: 1033128597}
 --- !u!1 &482868694
 GameObject:
   m_ObjectHideFlags: 0
@@ -19324,7 +19318,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1804349818}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24a1dfcfd8f1d5d499fc2590d779d1e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 94112ca868a5d4f80973641e44d74731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   numberButtons: {fileID: 805307925}
@@ -19341,6 +19335,10 @@ MonoBehaviour:
   textWheelZ2: {fileID: 846636191}
   textWheelZ3: {fileID: 1067463597}
   textWheelZ4: {fileID: 385943472}
+  textWheel2Z1: {fileID: 911452305}
+  textWheel2Z2: {fileID: 2012459558}
+  textWheel2Z3: {fileID: 120216280}
+  textWheel2Z4: {fileID: 1207814208}
 --- !u!1 &1808507319
 GameObject:
   m_ObjectHideFlags: 0
