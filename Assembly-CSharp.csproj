@@ -53,6 +53,7 @@
   <ItemGroup>
      <Compile Include="Assets\Roulette Statistics\Scripts\GameManager.cs" />
      <Compile Include="Assets\Roulette Statistics\Scripts\Number.cs" />
+     <Compile Include="Assets\Roulette Statistics\Scripts\Prediction.cs" />
      <Compile Include="Assets\Roulette Statistics\Scripts\Roulette.cs" />
      <Compile Include="Assets\Roulette Statistics\Scripts\ShowPanel.cs" />
  <Reference Include="UnityEngine.UIAutomation">
