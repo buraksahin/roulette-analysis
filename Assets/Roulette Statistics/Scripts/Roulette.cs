@@ -161,19 +161,21 @@ public class Roulette{
     }
 
 
-    // Set Numbers
-    public void SetNumber(int _number){
-        spinCount++; // Increase spin count
-        numbers[_number].IncreaseRank(); // Increase number count
-        numbers[_number].setSpinLine(spinCount);
-        numberLine.Add(_number);
+	/*
+     * Add new number
+     */
+    public void setNumber(int _number){
+        spinCount++; 								// Increase spin count
+        numbers[_number].increaseRank(); 			// Increase number count
+        numbers[_number].setSpinLine(spinCount);	// Add line count to number
+        numberLine.Add(_number);					// Add to number line
         if(spinCount > 1)
         {
             numbers[_number].increasePrev(numberLine[spinCount - 2]);	// Increase current number's prev
             numbers[numberLine[spinCount - 2]].increaseNext(_number);	// Increase next of previous number
 			// if previous number and current number is same
 			if(numberLine[spinCount - 1] == _number){
-                numbers[_number].IncreaserepeatCount(); // Increase repeat count of the number
+                numbers[_number].increaserepeatCount(); // Increase repeat count of the number
             }
         }
 		// Increase total color
@@ -200,24 +202,69 @@ public class Roulette{
 		totalZone[getNumberZone(_number)] += 1;
     }
 
-    // Calculate Probabilities
-    public void CalculateProbabilities(int num){
+	/*
+     * Remove last number
+     */
+	public void undoLastNumber(){
+		if(spinCount > 1){
+			numbers[numberLine[spinCount - 1]].decreasePrev(numberLine[spinCount - 2]);	// Decrease previous count
+			numbers[numberLine[spinCount - 2]].decreaseNext(numberLine[spinCount - 1]); // Decrease next count
+			if (numberLine[spinCount - 1] == numberLine[spinCount - 2]){
+				numbers[numberLine [spinCount - 2]].decreaserepeatCount();	// Decrease repeat count
+			}
+		}
+		if(spinCount > 0){
+			numbers[numberLine[spinCount - 1]].decreaseRank();		// Decrease number rank
+			numbers[numberLine[spinCount - 1]].removeSpinLine();	// Remove from spin line
+
+			// Increase total color
+			totalColor[numbers[numberLine[spinCount - 1]].getColor()] -= 1;
+
+			// Increase total Odd or Even
+			totalEvenOdd[numberLine[spinCount - 1] % 2] -= 1;
+
+			if (numberLine[spinCount - 1] != 0) {
+				// Increase total dozen
+				totalDozen[getNumberDozen(numberLine[spinCount - 1])] -= 1;
+
+				// Increase total column
+				totalColumn[getNumberColumnPosition(numberLine[spinCount - 1])] -= 1;
+
+				// Increase total low high
+				if (numberLine[spinCount - 1] < 19) {
+					totalLowHigh [0] -= 1;
+				} else {
+					totalLowHigh [1] -= 1;
+				}
+			}
+			// Increase total wheel
+			totalZone[getNumberZone(numberLine[spinCount - 1])] -= 1;
+			spinCount--;					// Decrease spin count
+			numberLine.RemoveAt(spinCount);	// Remove from number line
+		}// end of the condition
+	}// end of the method
+
+	/*
+     * Calculate probabilities
+     */
+    public void calculateProbabilities(int num){
     
     }
 
     /*
-     * Generate Random Numbers
+     * Calculate average prediction value
      */
-     public void GenerateRandomNumber(){    
-
-    }
-
-    /*
-     * Calculate Average Prediction Count
-     */
-     int CalculatePredictionCount(){
+     int calculatePredictionCount(){
         return 0;
     }
+
+	/*
+     * Generate random number
+     */
+	public void generateRandomNumber(){    
+
+	}
+
     #endregion
 
     #region Getters and Setters

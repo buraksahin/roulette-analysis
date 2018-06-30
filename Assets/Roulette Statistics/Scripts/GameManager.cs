@@ -8,10 +8,11 @@ public class GameManager : MonoBehaviour{
     Roulette myRoulette;
 	public Transform numberButtons;
 	public Transform[] textColumns;
-	public Transform textLastNumbers;
+	public Transform textLastNumbers, textLastNumbersCanvas;
 	public Transform textSpin, textStats1, textStats2, textStats3;
 	public Transform textWheelZ1, textWheelZ2, textWheelZ3, textWheelZ4;
 	public Transform textWheel2Z1, textWheel2Z2, textWheel2Z3, textWheel2Z4;
+	public Transform textAllStats;
 	#endregion
 
     // Use this for initialization
@@ -55,20 +56,36 @@ public class GameManager : MonoBehaviour{
 		textWheel2Z2.GetComponent<Text>().text = myRoulette.getZoneOrphelins() + "";
 		textWheel2Z3.GetComponent<Text>().text = myRoulette.getZoneOrphelins2() + "";
 		textWheel2Z4.GetComponent<Text>().text = myRoulette.getZoneTiers() + "";
+		// Update last numbers from main menu
 		textLastNumbers.GetComponent<Text>().text = "";
 		int x = myRoulette.numberLine.Count;
-		if (x > 12) {
+		if (x > 12){
 			x = 12;
 		}
 		for (int p = x; p>0; p--){
-			textLastNumbers.GetComponent<Text> ().text = getNumber(myRoulette.numberLine[myRoulette.numberLine.Count-p]) + "      " + textLastNumbers.GetComponent<Text>().text;
+			textLastNumbers.GetComponent<Text>().text = getNumber(myRoulette.numberLine[myRoulette.numberLine.Count-p]) + "      " + textLastNumbers.GetComponent<Text>().text;
+		}
+		// Update last numbers from new window canvas
+		textLastNumbersCanvas.GetComponent<Text>().text = "";
+		int z = myRoulette.numberLine.Count;
+		if (z > 156){
+			z = 156;
+		}
+
+		for (int t = z; t>0; t--){
+			textLastNumbersCanvas.GetComponent<Text>().text = getNumber(myRoulette.numberLine[myRoulette.numberLine.Count-t]) + "      " + textLastNumbersCanvas.GetComponent<Text>().text;
 		}
 	}
 	#endregion
 
 	#region Helper Functions
 	public void addNumberToRoulette(int i){
-		myRoulette.SetNumber(i);
+		myRoulette.setNumber(i);
+		HandleUI();
+	}
+
+	public void removeLastNumber(){
+		myRoulette.undoLastNumber();
 		HandleUI();
 	}
 

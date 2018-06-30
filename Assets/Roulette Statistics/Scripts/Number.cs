@@ -82,12 +82,17 @@ public class Number
     }
 
     // Setters
-    public void IncreaseRank() { rank++; }
-    public void IncreaserepeatCount() { repeatCount++; }
+    public void increaseRank() { rank++; }
+	public void decreaseRank() { rank--; }
+    public void increaserepeatCount() { repeatCount++; }
+	public void decreaserepeatCount() { repeatCount--; }
+	public void increaseNext(int i) { next[i] = next[i] + 1; }
+	public void increasePrev(int i) { prev[i] = prev[i] + 1; }
+	public void decreaseNext(int i) { next[i] = next[i] - 1; }
+	public void decreasePrev(int i) { prev[i] = prev[i] - 1; }
     public void setProbability(float prob) { probability = prob; }
-    public void increaseNext(int i) { next[i] = next[i] + 1; }
-    public void increasePrev(int i) { prev[i] = prev[i] + 1; }
     public void setSpinLine(int line) { spinLine.Add(line); }
+	public void removeSpinLine() { spinLine.RemoveAt(spinLine.Count-1); }
 
     /*
     * Calculate Number Properties Value
